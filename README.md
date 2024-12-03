@@ -37,7 +37,7 @@ cd bluesky-scambaiter
 
 2. Install dependencies:
 ```bash
-npm install
+npm install @atproto/api dotenv node-fetch winston
 ```
 
 3. Create a `.env` file in the project root:
