@@ -26,7 +26,6 @@ This tool is intended for legitimate cybersecurity professionals conducting auth
 - pip for package installation
 - Bluesky account with App Password
 - OpenRouter API key
-- Proper authorization for security testing
 
 ## 🔧 Installation
 
