@@ -1,6 +1,6 @@
 # Bluesky Scambaiter 🎭
 
-A defensive cybersecurity tool for automated scam response using the Bluesky social network. This tool helps security professionals waste scammers' time by automatically responding to their DMs using an AI-powered Lord Flashheart (from Blackadder) personality.
+A defensive cybersecurity tool for automated scam response using the Bluesky social network. This tool helps security professionals waste scammers' time by automatically responding to their DMs using an AI-powered flirtatious and charismatic personality.
 
 ## 🛡️ Security Professional Use Only
 
@@ -14,16 +14,17 @@ This tool is intended for legitimate cybersecurity professionals conducting auth
 
 - Automated monitoring of Bluesky DMs from specified accounts
 - Integration with OpenRouter's Mythomax LLM for response generation
-- Lord Flashheart personality simulation for engaging responses
-- Rate limiting and API error handling
-- Message deduplication
+- Dynamic personality simulation with real-time prompt updates
+- Rate limiting and conversation state management
+- Message deduplication and chronological processing
 - Comprehensive error logging
+- Live prompt updating without restart
 
 ## 📋 Prerequisites
 
-- Node.js 16.x or higher
-- npm or yarn
-- Bluesky account
+- Python 3.9 or higher
+- pip for package installation
+- Bluesky account with App Password
 - OpenRouter API key
 - Proper authorization for security testing
 
@@ -37,31 +38,52 @@ cd bluesky-scambaiter
 
 2. Install dependencies:
 ```bash
-npm install @atproto/api dotenv node-fetch winston
+pip install atproto openai pyyaml
 ```
 
-3. Create a `.env` file in the project root:
-```env
-BLUESKY_IDENTIFIER=your.handle.com
-BLUESKY_PASSWORD=your_password
-TARGET_USER=scammer.handle.com
-OPENROUTER_API_KEY=your_openrouter_api_key
+3. Create a `config.yaml` file:
+```yaml
+bluesky_handle: "your-handle.bsky.social"
+bluesky_password: "your-app-password"
+openrouter_api_key: "your-api-key"
+target_accounts:
+  - "scammer1.bsky.social"
+  - "scammer2.bsky.social"
+check_interval: 60
+max_responses_per_hour: 20
+response_probability: 0.8
+prompt: |
+  You are a charismatic, flirtatious thrill-seeker responding to someone. Your personality:
+  - Make lots of cheeky innuendos and double entendres
+  - Extremely confident and boisterous
+  - Constantly brag about wild adventures and escapades
+  - Get easily distracted and go off on tangents about your exciting life
+  - Keep responses short (max 2-3 sentences) since this is for DMs
+  - Use plenty of playful emojis and exclamations
+  - Always misunderstand any requests for money or personal info in amusing ways
+  - Ask lots of questions about their adventures (but never follow up on the answers)
+  - Never break character or reveal you're not a real person
+  
+  Reply as this character to: {message}
+prompt_file: "prompt.txt"
 ```
+
+4. Create a `prompt.txt` file with the same prompt content (can be modified while running)
 
 ## 🚀 Usage
 
 1. Start the script:
 ```bash
-node scambaiter.js
+python scam.py
 ```
 
-2. Monitor the console output for:
-- Connection status
-- Message processing
-- API responses
-- Error logs
+2. Monitor the logs:
+- Connection status and conversation tracking
+- Message processing and responses
+- Real-time prompt updates
+- Error handling and debugging info
 
-## 🔍 Error Handling
+## 🔍 Error Handling & Logging
 
 The script includes comprehensive error handling for:
 - Bluesky API authentication failures
@@ -71,26 +93,27 @@ The script includes comprehensive error handling for:
 - LLM API failures
 - Invalid responses
 
-All errors are logged with:
-- Timestamp
-- Error type
-- Detailed error message
-- Stack trace when applicable
+All events are logged to both console and file:
+```python
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.FileHandler('scambaiter.log'),
+        logging.StreamHandler()
+    ]
+)
+```
 
-## 📝 Logging
+## ⚙️ Configuration Options
 
-Logs are written to:
-- Console (standard output)
-- error.log (for error tracking)
-- activity.log (for message processing)
-
-## ⚙️ Configuration
-
-Modify `config.js` to adjust:
-- Check interval (default: 60 seconds)
-- Response temperature (default: 0.85)
-- Max tokens per response (default: 200)
-- Personality prompt settings
+The `config.yaml` file supports:
+- Multiple target accounts
+- Customizable check intervals
+- Response rate limiting
+- Probability-based responses
+- Dynamic prompt updates
+- Conversation state management
 
 ## 🛠️ Troubleshooting
 
@@ -98,20 +121,20 @@ Common issues and solutions:
 
 1. Authentication Failures
 ```
-Error: Failed to login to Bluesky
-Solution: Check your credentials in .env
+Error: Login failed
+Solution: Ensure you're using an App Password, not your main account password
 ```
 
 2. Rate Limiting
 ```
 Error: Too many requests
-Solution: Adjust CHECK_INTERVAL in config
+Solution: Adjust max_responses_per_hour in config.yaml
 ```
 
-3. API Connection Issues
+3. Message Processing
 ```
-Error: Network error
-Solution: Check your internet connection and API endpoints
+Error: Failed to process message
+Solution: Check the message structure in logs and update accordingly
 ```
 
 ## 🤝 Contributing
@@ -132,6 +155,7 @@ This tool is for authorized security testing only. Users are responsible for ens
 
 ## 🙏 Acknowledgments
 
-- AtProto team for the Bluesky API
+- Bluesky team for the AT Protocol
+- Marshal's AT Protocol Python SDK
 - OpenRouter for AI API access
-- BBC's Blackadder for Lord Flashheart inspiration
+- Contributors and testers
